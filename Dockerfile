@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 애플리케이션 JAR 파일을 컨테이너 내부로 복사
 # target 디렉토리에서 빌드된 JAR 파일을 복사합니다.
-COPY target/*.jar app.jar
+COPY build/libs/*.jar app.jar
 
 # 컨테이너의 /tmp 폴더를 VOLUME으로 설정 (스프링부트에서 임시 파일 저장용)
 VOLUME /tmp

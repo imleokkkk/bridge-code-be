@@ -6,3 +6,10 @@ spring:
     name: bridge-code-be  # 프로젝트 이름 설정
   main:
     allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /

@@ -32,8 +32,6 @@ public class AIService {
                     .retrieve()
                     .body(InitAiResponse.class);
 
-            log.info("******* TOPIC ******");
-            log.info(AIResponse.getTopic());
             log.info("******* ORIGIN ******");
             log.info(AIResponse.getOrigin());
             log.info("******* RESPONSE ******");
@@ -53,10 +51,28 @@ public class AIService {
                     if(nextToken.equals("```python") || nextToken.equals("```")){
                         continue;
                     }
+
+                    int plus = 0;
+                    if(nextToken.startsWith(" ")){
+                        log.info("HERE");
+                        for(int i = 0; i<nextToken.length(); i++){
+                            if(nextToken.charAt(i) != ' '){
+                                plus = i / 4;
+                                break;
+                            }
+                        }
+
+                    }
                     log.info("&&&&&&&&&&&&&&&&&&&&&");
+                    log.info(plus+"");
                     log.info(nextToken);
-                    log.info(problemRepository.tokenize(nextToken).toString());
-                    chunks.add(problemRepository.tokenize(nextToken));
+                    log.info(problemRepository.tokenizePythonCode(nextToken).toString());
+                    List<String> toAdd = new ArrayList<>();
+                    for(int i = 0; i<plus; i++){
+                        toAdd.add("+");
+                    }
+                    toAdd.addAll(problemRepository.tokenizePythonCode(nextToken));
+                    chunks.add(toAdd);
                 }
             }
 

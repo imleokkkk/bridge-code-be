@@ -38,29 +38,65 @@ public class ProblemRepository {
                     OPERATOR_REGEX + "|" + BRACKET_REGEX + "|" + COMMA_COLON_REGEX + "|" + NEWLINE_REGEX
     );
 
-    public List<String> tokenize(String code) {
+    public static List<String> tokenizePythonCode(String code) {
         List<String> tokens = new ArrayList<>();
-        Matcher matcher = TOKEN_PATTERN.matcher(code);
-        Stack<String> bracketStack = new Stack<>();
 
-        while (matcher.find()) {
-            String token = matcher.group();
+        // 문자열 리터럴 패턴 ("" 또는 '')
+        Pattern stringPattern = Pattern.compile("([rfb]?[\"'])(.*?)(\\1)");
 
-            // 괄호 내부인지 확인
-            if ("({[".contains(token)) {
-                bracketStack.push(token);
-            } else if (")}]".contains(token)) {
-                if (!bracketStack.isEmpty()) {
-                    bracketStack.pop();
-                }
+        // 리스트, 딕셔너리 감지 패턴 (대괄호, 중괄호 포함)
+        Pattern listDictPattern = Pattern.compile("\\[[^\\]]*]|\\{[^}]*}");
+
+        // 연산자 및 기호 리스트
+        String[] operators = {
+                "==", "!=", "<=", ">=", "+=", "-=", "*=", "/=", "//", "**",
+                "=", "+", "-", "*", "/", "%", "<", ">", "(", ")", "[", "]", "{", "}", ":", ",", "."
+        };
+
+        // 문자열 리터럴 및 리스트/딕셔너리 임시 저장
+        List<String> specialLiterals = new ArrayList<>();
+        Matcher stringMatcher = stringPattern.matcher(code);
+        StringBuffer sb = new StringBuffer();
+
+        // 문자열 리터럴 추출 및 임시 대체
+        while (stringMatcher.find()) {
+            String found = stringMatcher.group();
+            specialLiterals.add(found);
+            stringMatcher.appendReplacement(sb, " SPECIAL_LITERAL_" + (specialLiterals.size() - 1) + " ");
+        }
+        stringMatcher.appendTail(sb);
+        code = sb.toString();
+
+        // 리스트/딕셔너리 추출 및 임시 대체
+        sb.setLength(0);
+        Matcher listDictMatcher = listDictPattern.matcher(code);
+        while (listDictMatcher.find()) {
+            String found = listDictMatcher.group();
+            specialLiterals.add(found);
+            listDictMatcher.appendReplacement(sb, " SPECIAL_LITERAL_" + (specialLiterals.size() - 1) + " ");
+        }
+        listDictMatcher.appendTail(sb);
+        code = sb.toString();
+
+        // 연산자 주변에 공백 추가
+        for (String op : operators) {
+            code = code.replace(op, " " + op + " ");
+        }
+
+        // 공백으로 분리
+        String[] rawTokens = code.split("\\s+");
+
+        // 빈 토큰 제거 및 리터럴 복원
+        for (String token : rawTokens) {
+            if (token.isEmpty()) continue;
+
+            // 리터럴 복원
+            if (token.startsWith("SPECIAL_LITERAL_")) {
+                int index = Integer.parseInt(token.substring("SPECIAL_LITERAL_".length()));
+                tokens.add(specialLiterals.get(index));
+            } else {
+                tokens.add(token);
             }
-
-            // 줄바꿈이 괄호 내부에 있을 경우 무시
-            if (token.equals("\n") && !bracketStack.isEmpty()) {
-                continue;
-            }
-
-            tokens.add(token);
         }
 
         return tokens;

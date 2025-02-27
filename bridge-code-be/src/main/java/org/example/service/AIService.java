@@ -93,6 +93,7 @@ public class AIService {
             return initResponse;
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Error sending request to AI server: {}", e.getMessage());
             InitResponse errorResponse = new InitResponse();
 //            errorResponse.setResponse("Error: " + e.getMessage());

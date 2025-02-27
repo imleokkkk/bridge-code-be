@@ -32,9 +32,7 @@ public class FrontService {
     }
 
     public SubmitResponse userInputQuery(SubmitRequest request) {
-//        List<String> checkTarget = problemRepository.getChunks()[problemNum].get(problemRepository.getCurLevel());
         List<String> checkTarget = problemRepository.getBlocks().get(problemRepository.getCurLevel());
-        log.info(checkTarget.toString());
         List<String> submittedAnswer = request.getCombi();
 
         SubmitResponse submitResponse = new SubmitResponse();

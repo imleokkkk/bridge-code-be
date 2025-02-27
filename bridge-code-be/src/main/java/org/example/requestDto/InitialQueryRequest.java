@@ -7,7 +7,4 @@ import lombok.Data;
 public class InitialQueryRequest {
     @JsonProperty("user_id")
     private String userId;
-
-    @JsonProperty("original_codes")
-    private String originalCodes;
 }

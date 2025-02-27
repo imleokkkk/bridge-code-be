@@ -38,15 +38,21 @@ public class AIService {
 
             String response = "Demo";
             StringTokenizer st = new StringTokenizer(response,"\n");
-            List<String> comments = new ArrayList<>();
-            while(st.hasMoreTokens()){
-                comments.add(st.nextToken());
-            }
+
 
             List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
             for(List<String> l : chunks){
                 log.info("*******************");
                 log.info("문장 : "+l);
+            }
+
+            List<String> comments = new ArrayList<>();
+            while(st.hasMoreTokens()){
+                comments.add(st.nextToken());
+            }
+
+            for(int i = 0; i<chunks.size(); i++){
+                comments.add("주석"+(i+1));
             }
 
             InitResponse initResponse = new InitResponse();

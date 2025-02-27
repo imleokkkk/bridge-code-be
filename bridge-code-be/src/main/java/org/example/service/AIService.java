@@ -45,15 +45,17 @@ public class AIService {
 
 //            List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
 
-            st = new StringTokenizer(AIResponse.getOrigin(),"\n ");
+            st = new StringTokenizer(AIResponse.getOrigin(),"\n");
             List<List<String>> chunks = new ArrayList<>();
             while(st.hasMoreTokens()){
                 String nextToken = st.nextToken();
                 if(!nextToken.isEmpty()) {
-                    log.info(nextToken);
                     if(nextToken.equals("```python") || nextToken.equals("```")){
                         continue;
                     }
+                    log.info("&&&&&&&&&&&&&&&&&&&&&");
+                    log.info(nextToken);
+                    log.info(problemRepository.tokenize(nextToken).toString());
                     chunks.add(problemRepository.tokenize(nextToken));
                 }
             }
@@ -75,6 +77,7 @@ public class AIService {
                     if(nextToken.equals("```python") || nextToken.equals("```")){
                         continue;
                     }
+                    log.info(nextToken);
                     comments.add(nextToken);
                 }
             }

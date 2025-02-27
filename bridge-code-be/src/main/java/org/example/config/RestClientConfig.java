@@ -10,7 +10,7 @@ public class RestClientConfig {
     public RestClient restClient() {
         return RestClient.builder()
 //                .baseUrl("https://c848-211-244-225-164.ngrok-free.app")
-                .baseUrl("http://ai:5000")
+                .baseUrl("http://3.39.64.55:5000")
                 .build();
     }
 }

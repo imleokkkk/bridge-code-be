@@ -9,5 +9,5 @@ public class UserInputRequest {
     private String userId;
 
     @JsonProperty("oneline_code")
-    private String onelineCode;
+    private int onelineCode;
 }

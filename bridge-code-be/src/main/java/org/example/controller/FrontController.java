@@ -2,9 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.requestDto.InitialQueryRequest;
-import org.example.requestDto.InitRequest;
-import org.example.requestDto.SubmitRequest;
+import org.example.requestDto.*;
 import org.example.responseDto.FinalResponse;
 import org.example.responseDto.InitResponse;
 import org.example.responseDto.SubmitResponse;
@@ -12,7 +10,6 @@ import org.example.service.AIService;
 import org.example.service.FrontService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.requestDto.FinalSummaryRequest;
 
 @Slf4j
 @RestController
@@ -36,17 +33,19 @@ public class FrontController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<SubmitResponse> userInputQeury(@RequestBody SubmitRequest request){
+    public ResponseEntity<SubmitResponse> userInputQuery(@RequestBody SubmitRequest request){
         // 맞는지 틀리는지 확인
         SubmitResponse response = frontService.userInputQuery(request);
         return ResponseEntity.ok(response);
     }
 
-    // TODO : repo에서 problemNum을 초기화 해주고, 중복이 없게 처리 + level = 0으로 초기화
-    // TODO : visited이면 다른 randomNum ㄱㄱ
 
-//    @PostMapping("/final")
-//    public ResponseEntity<FinalResponse> getFinalQuery(@RequestBody FinalSummaryRequest request){
-//        FinalSummaryRequest
-//    }
+
+    @PostMapping("/final")
+    public ResponseEntity<FinalResponse> getFinalQuery(@RequestBody FinalRequest request){
+        log.info(request.toString());
+        FinalSummaryRequest finalSummaryRequest = frontService.convertToFinalSummaryRequest(request);
+        FinalResponse response = aiService.finalQuery(finalSummaryRequest);
+        return ResponseEntity.ok(response);
+    }
  }

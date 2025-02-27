@@ -3,13 +3,14 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.repository.ProblemRepository;
+import org.example.requestDto.FinalSummaryRequest;
 import org.example.requestDto.InitialQueryRequest;
-import org.example.responseDto.AiInitialResponse;
-import org.example.responseDto.InitResponse;
-import org.example.responseDto.SubmitResponse;
+import org.example.requestDto.SubmitAiRequest;
+import org.example.responseDto.*;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,18 @@ public class AIService {
 
     public InitResponse sendInitialQuery(InitialQueryRequest request) {
         try {
-            log.info("Request as JSON: {}", new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(request));
+            AiInitialResponse AIResponse = restClient.post()
+                    .uri("/interpret_initial_code/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(request)
+                    .retrieve()
+                    .body(AiInitialResponse.class);
 
-//            AiInitialResponse AIResponse = restClient.post()
-//                    .uri("/interpret_initial_code")
-//                    .contentType(MediaType.APPLICATION_JSON)
-//                    .body(request)
-//                    .retrieve()
-//                    .body(AiInitialResponse.class);
+            String response = AIResponse.getResponse();
+            log.info(response);
 
-//            String response = AIResponse.getResponse();
-//            log.info(response);
+//            String response = "Demo";
 
-            String response = "Demo";
-            StringTokenizer st = new StringTokenizer(response,"\n");
 
 
             List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
@@ -46,13 +45,11 @@ public class AIService {
                 log.info("문장 : "+l);
             }
 
+            StringTokenizer st = new StringTokenizer(response,"\n");
+
             List<String> comments = new ArrayList<>();
             while(st.hasMoreTokens()){
                 comments.add(st.nextToken());
-            }
-
-            for(int i = 0; i<chunks.size(); i++){
-                comments.add("주석"+(i+1));
             }
 
             InitResponse initResponse = new InitResponse();
@@ -69,4 +66,35 @@ public class AIService {
             return errorResponse;
         }
     }
+
+    public SubmitAiResponse submitRequest(SubmitAiRequest submitAiRequest) {
+        try{
+            return restClient.post()
+                    .uri("/interpret_user_input/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(submitAiRequest)
+                    .retrieve()
+                    .body(SubmitAiResponse.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public FinalResponse finalQuery(FinalSummaryRequest finalSummaryRequest) {
+        try{
+            return restClient.post()
+                    .uri("/summarize-user-inputs/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(finalSummaryRequest)
+                    .retrieve()
+                    .body(FinalResponse.class);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

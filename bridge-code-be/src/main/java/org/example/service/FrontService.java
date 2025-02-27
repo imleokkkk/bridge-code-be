@@ -3,11 +3,10 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.repository.ProblemRepository;
-import org.example.requestDto.InitialQueryRequest;
-import org.example.requestDto.InitRequest;
-import org.example.requestDto.SubmitRequest;
+import org.example.requestDto.*;
 import org.springframework.stereotype.Service;
 import org.example.responseDto.SubmitResponse;
+import org.example.responseDto.SubmitAiResponse;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.StringTokenizer;
 public class FrontService {
 
     private final ProblemRepository problemRepository;
+    private final AIService aiService;
 
     // FrontService
     public InitialQueryRequest convertToInitialQueryRequest(InitRequest request) {
@@ -46,14 +46,41 @@ public class FrontService {
             }
 
             // 다른게 있으면 false 리턴
+            SubmitAiRequest submitAiRequest = new SubmitAiRequest();
+            submitAiRequest.setUserId(request.getUserId());
+            StringBuilder sb = new StringBuilder();
+            for(String s : submittedAnswer){
+                sb.append(s).append(" ");
+            }
+
+            submitAiRequest.setOnelineCode(sb.toString());
+            SubmitAiResponse submitAiResponse = aiService.submitRequest(submitAiRequest);
+
+            submitResponse.setFeedback(submitAiResponse.getResponse());
             submitResponse.setAnswer(false);
-            submitResponse.setFeedback("Demo Feedback");
+
             return submitResponse;
         }
 
         submitResponse.setAnswer(true);
         problemRepository.setCurLevel(problemRepository.getCurLevel()+1);
-        problemRepository.visited[problemRepository.getCurProblemNum()] = false;
+        problemRepository.visited[problemRepository.getCurProblemNum()] = true;
         return submitResponse;
+    }
+
+    public FinalSummaryRequest convertToFinalSummaryRequest(FinalRequest request) {
+        while(true){
+            int nextProblemNum = (int)(Math.random() * problemRepository.visited.length);
+            if(!problemRepository.visited[nextProblemNum]) {
+                problemRepository.setCurProblemNum(nextProblemNum);
+                problemRepository.visited[nextProblemNum] = true;
+                problemRepository.setCurLevel(0);
+                break;
+            }
+        }
+
+        FinalSummaryRequest finalSummaryRequest = new FinalSummaryRequest();
+        finalSummaryRequest.setUserId(request.getUserId());
+        return finalSummaryRequest;
     }
 }

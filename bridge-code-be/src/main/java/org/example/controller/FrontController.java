@@ -43,7 +43,6 @@ public class FrontController {
 
     @PostMapping("/final")
     public ResponseEntity<FinalResponse> getFinalQuery(@RequestBody FinalRequest request){
-        log.info(request.toString());
         FinalSummaryRequest finalSummaryRequest = frontService.convertToFinalSummaryRequest(request);
         FinalResponse response = aiService.finalQuery(finalSummaryRequest);
         return ResponseEntity.ok(response);

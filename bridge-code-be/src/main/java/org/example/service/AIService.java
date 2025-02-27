@@ -25,37 +25,67 @@ public class AIService {
 
     public InitResponse sendInitialQuery(InitialQueryRequest request) {
         try {
-            AiInitialResponse AIResponse = restClient.post()
+            InitAiResponse AIResponse = restClient.post()
                     .uri("/interpret_initial_code/")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(request)
                     .retrieve()
-                    .body(AiInitialResponse.class);
+                    .body(InitAiResponse.class);
 
-            String response = AIResponse.getResponse();
-            log.info(response);
+            log.info("******* TOPIC ******");
+            log.info(AIResponse.getTopic());
+            log.info("******* ORIGIN ******");
+            log.info(AIResponse.getOrigin());
+            log.info("******* RESPONSE ******");
+            log.info(AIResponse.getResponse());
 
-//            String response = "Demo";
+            String response = "Demo";
 
+            StringTokenizer st;
 
+//            List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
 
-            List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
-            for(List<String> l : chunks){
-                log.info("*******************");
-                log.info("문장 : "+l);
+            st = new StringTokenizer(AIResponse.getOrigin(),"\n ");
+            List<List<String>> chunks = new ArrayList<>();
+            while(st.hasMoreTokens()){
+                String nextToken = st.nextToken();
+                if(!nextToken.isEmpty()) {
+                    log.info(nextToken);
+                    if(nextToken.equals("```python") || nextToken.equals("```")){
+                        continue;
+                    }
+                    chunks.add(problemRepository.tokenize(nextToken));
+                }
             }
 
-            StringTokenizer st = new StringTokenizer(response,"\n");
+
+
+//            for(List<String> l : chunks){
+//                log.info("*******************");
+//                log.info("문장 : "+l);
+//            }
+
+            st = new StringTokenizer(AIResponse.getResponse(),"\n");
 
             List<String> comments = new ArrayList<>();
             while(st.hasMoreTokens()){
-                comments.add(st.nextToken());
+                String nextToken = st.nextToken();
+                if(!nextToken.isEmpty()){
+//                    log.info("BYE!!!!!! : "+nextToken);
+                    if(nextToken.equals("```python") || nextToken.equals("```")){
+                        continue;
+                    }
+                    comments.add(nextToken);
+                }
             }
 
             InitResponse initResponse = new InitResponse();
-            initResponse.setProblem(problemRepository.getProblems()[problemRepository.getCurProblemNum()]);
+            initResponse.setProblem(AIResponse.getTopic());
             initResponse.setBlocks(chunks);
             initResponse.setComments(comments);
+            problemRepository.setCurProblem(AIResponse.getTopic());
+            problemRepository.setBlocks(chunks);
+            problemRepository.setComments(comments);
 
             return initResponse;
 

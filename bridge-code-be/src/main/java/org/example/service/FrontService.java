@@ -24,18 +24,16 @@ public class FrontService {
     // FrontService
     public InitialQueryRequest convertToInitialQueryRequest(InitRequest request) {
         String id = request.getUserId();
-        String problem = problemRepository.getAnswers()[problemRepository.getCurProblemNum()];
 
         InitialQueryRequest initialQueryRequest = new InitialQueryRequest();
         initialQueryRequest.setUserId(id);
-        initialQueryRequest.setOriginalCodes(problem);
 
         return initialQueryRequest;
     }
 
     public SubmitResponse userInputQuery(SubmitRequest request) {
-        int problemNum = problemRepository.getCurProblemNum();
-        List<String> checkTarget = problemRepository.getChunks()[problemNum].get(problemRepository.getCurLevel());
+//        List<String> checkTarget = problemRepository.getChunks()[problemNum].get(problemRepository.getCurLevel());
+        List<String> checkTarget = problemRepository.getBlocks().get(problemRepository.getCurLevel());
         List<String> submittedAnswer = request.getCombi();
 
         SubmitResponse submitResponse = new SubmitResponse();
@@ -64,21 +62,11 @@ public class FrontService {
 
         submitResponse.setAnswer(true);
         problemRepository.setCurLevel(problemRepository.getCurLevel()+1);
-        problemRepository.visited[problemRepository.getCurProblemNum()] = true;
         return submitResponse;
     }
 
     public FinalSummaryRequest convertToFinalSummaryRequest(FinalRequest request) {
-        while(true){
-            int nextProblemNum = (int)(Math.random() * problemRepository.visited.length);
-            if(!problemRepository.visited[nextProblemNum]) {
-                problemRepository.setCurProblemNum(nextProblemNum);
-                problemRepository.visited[nextProblemNum] = true;
-                problemRepository.setCurLevel(0);
-                break;
-            }
-        }
-
+        problemRepository.setCurLevel(0);
         FinalSummaryRequest finalSummaryRequest = new FinalSummaryRequest();
         finalSummaryRequest.setUserId(request.getUserId());
         return finalSummaryRequest;

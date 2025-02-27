@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.repository.ProblemRepository;
 import org.example.requestDto.InitialQueryRequest;
 import org.example.requestDto.InitRequest;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import java.util.StringTokenizer;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FrontService {
@@ -51,6 +53,7 @@ public class FrontService {
             }
 
             // 다른게 있으면 false 리턴
+            log.info(submittedAnswer.get(i)+" is wrong!     "+ " Expected : "+checkTarget.get(i));
             submitResponse.setAnswer(false);
             submitResponse.setFeedback("Demo Feedback");
             return submitResponse;

@@ -45,4 +45,7 @@ public class FrontController {
         SubmitResponse response = frontService.userInputQuery(request);
         return ResponseEntity.ok(response);
     }
+
+//    @GetMapping("/final")
+//    public ResponseEntity<FinalResponse> getFinalQuery()
  }

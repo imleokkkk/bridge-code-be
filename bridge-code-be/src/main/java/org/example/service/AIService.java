@@ -77,8 +77,8 @@ public class AIService {
                     Collections.shuffle(tokenizedShuffled);
 
                     for(int i = 0; i<plus; i++){
-                        toAdd.add("+");
-                        shuffled.add("+");
+                        toAdd.add("@");
+                        shuffled.add("@");
                     }
                     toAdd.addAll(tokenized);
                     shuffled.addAll(tokenizedShuffled);

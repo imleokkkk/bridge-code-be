@@ -9,7 +9,7 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         return RestClient.builder()
-                .baseUrl("http://external-ai-server.com") // AI 서버 기본 URL
+                .baseUrl("http://localhost:8000") // AI 서버 기본 URL
                 .build();
     }
 }

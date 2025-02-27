@@ -22,14 +22,19 @@ public class AIService {
     private final RestClient restClient;
     private final ProblemRepository problemRepository;
 
-    public InitResponse sendInitialQuery(InitialQueryRequest request, int problemNum) {
+    public InitResponse sendInitialQuery(InitialQueryRequest request) {
         try {
+            log.info("Request as JSON: {}", new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(request));
+
 //            AiInitialResponse AIResponse = restClient.post()
-//                    .uri("/initial")
+//                    .uri("/interpret_initial_code")
 //                    .contentType(MediaType.APPLICATION_JSON)
 //                    .body(request)
 //                    .retrieve()
 //                    .body(AiInitialResponse.class);
+
+//            String response = AIResponse.getResponse();
+//            log.info(response);
 
             String response = "Demo";
             StringTokenizer st = new StringTokenizer(response,"\n");
@@ -38,14 +43,14 @@ public class AIService {
                 comments.add(st.nextToken());
             }
 
-            List<List<String>> chunks = problemRepository.getChunks()[problemNum];
+            List<List<String>> chunks = problemRepository.getChunks()[problemRepository.getCurProblemNum()];
             for(List<String> l : chunks){
                 log.info("*******************");
                 log.info("문장 : "+l);
             }
 
             InitResponse initResponse = new InitResponse();
-            initResponse.setProblem(problemRepository.getProblems()[problemNum]);
+            initResponse.setProblem(problemRepository.getProblems()[problemRepository.getCurProblemNum()]);
             initResponse.setBlocks(chunks);
             initResponse.setComments(comments);
 

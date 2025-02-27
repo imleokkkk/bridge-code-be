@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProblemRepository {
     private int curLevel = 0;
+
 
     private String[] problems = {"1. 숫자를 부호에 따라 다르게 출력하세요", "2. 1부터 10 중 홀수만 출력하세요.", "3. 주어진 샘플에서 10초과 50미만의 수를 출력하세요."};
 
@@ -35,6 +38,10 @@ public class ProblemRepository {
                     "for num in sample:\n" +
                     "+ if 10 < num < 50:\n" +
                     "+ + print(num)"};
+
+    private int curProblemNum = (int)(Math.random() * problems.length);
+
+    public boolean[] visited = new boolean[problems.length];
 
     private List<List<String>>[] chunks;
     public ProblemRepository(){

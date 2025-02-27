@@ -56,7 +56,6 @@ public class AIService {
 
                     int plus = 0;
                     if(nextToken.startsWith(" ")){
-                        log.info("HERE");
                         for(int i = 0; i<nextToken.length(); i++){
                             if(nextToken.charAt(i) != ' '){
                                 plus = i / 4;

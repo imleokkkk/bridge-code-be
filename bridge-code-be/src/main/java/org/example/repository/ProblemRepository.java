@@ -18,7 +18,7 @@ import java.util.Stack;
 @Setter
 @Component
 public class ProblemRepository {
-    private int curLevel = 0;
+    private int curLevel;
     private String curProblem;
     private List<List<String>> blocks;
     private List<String> comments;

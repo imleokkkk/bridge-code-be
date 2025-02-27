@@ -27,13 +27,16 @@ public class FrontService {
 
         InitialQueryRequest initialQueryRequest = new InitialQueryRequest();
         initialQueryRequest.setUserId(id);
+        problemRepository.setCurLevel(0);
 
         return initialQueryRequest;
     }
 
     public SubmitResponse userInputQuery(SubmitRequest request) {
         List<String> checkTarget = problemRepository.getBlocks().get(problemRepository.getCurLevel());
+        log.info("Target : "+checkTarget.toString());
         List<String> submittedAnswer = request.getCombi();
+        log.info("Combi : "+submittedAnswer.toString());
 
         SubmitResponse submitResponse = new SubmitResponse();
 
@@ -41,6 +44,9 @@ public class FrontService {
             if(submittedAnswer.get(i).equals(checkTarget.get(j))){
                 continue;
             }
+
+
+            log.info(submittedAnswer.get(i) + " "  +checkTarget.get(j));
 
             // 다른게 있으면 false 리턴
             SubmitAiRequest submitAiRequest = new SubmitAiRequest();

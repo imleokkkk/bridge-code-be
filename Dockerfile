@@ -5,12 +5,10 @@ FROM gradle:7.6.0-jdk17 as builder
 WORKDIR /home/gradle/project
 
 # 리포지터리 루트의 bridge-code-be/bridge-code-be 폴더 전체를 복사
-COPY /bridge-code-be/* . 
+COPY . . 
 
 # gradlew가 실행 권한이 없을 경우 권한 부여 (필요 시)
 RUN chmod +x gradlew
-
-COPY build.gradle.kts build.gradle.kts
 
 # Gradle 빌드 실행 – bootJar 명령어로 실행 가능한 JAR 파일 생성
 RUN ./gradlew bootJar --no-daemon

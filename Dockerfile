@@ -5,7 +5,7 @@ FROM gradle:7.6.0-jdk17 as builder
 WORKDIR /home/gradle/project
 
 # 리포지터리 루트의 bridge-code-be/bridge-code-be 폴더 전체를 복사
-COPY bridge-code-be/bridge-code-be/ . 
+COPY bridge-code-be/ . 
 
 # gradlew가 실행 권한이 없을 경우 권한 부여 (필요 시)
 RUN chmod +x gradlew

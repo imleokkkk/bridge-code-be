@@ -9,7 +9,8 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         return RestClient.builder()
-                .baseUrl("https://7f60-211-244-225-164.ngrok-free.app")
+//                .baseUrl("https://7f60-211-244-225-164.ngrok-free.app")
+                .baseUrl("ALB-python-1567497534.ap-northeast-2.elb.amazonaws.com:5000")
                 .build();
     }
 }

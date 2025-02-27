@@ -9,7 +9,7 @@ public class RestClientConfig {
     @Bean
     public RestClient restClient() {
         return RestClient.builder()
-//                .baseUrl("https://7f60-211-244-225-164.ngrok-free.app")
+//                .baseUrl("https://c848-211-244-225-164.ngrok-free.app")
                 .baseUrl("http://ai:5000")
                 .build();
     }

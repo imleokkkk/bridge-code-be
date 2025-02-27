@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -45,6 +46,7 @@ public class AIService {
 
             st = new StringTokenizer(AIResponse.getOrigin(),"\n");
             List<List<String>> chunks = new ArrayList<>();
+            List<List<String>> shuffledChunks = new ArrayList<>();
             while(st.hasMoreTokens()){
                 String nextToken = st.nextToken();
                 if(!nextToken.isEmpty()) {
@@ -68,10 +70,21 @@ public class AIService {
                     log.info(nextToken);
                     log.info(problemRepository.tokenizePythonCode(nextToken).toString());
                     List<String> toAdd = new ArrayList<>();
+                    List<String> shuffled = new ArrayList<>();
+
+                    List<String> tokenized = problemRepository.tokenizePythonCode(nextToken);
+                    List<String> tokenizedShuffled = new ArrayList<>(tokenized);
+                    Collections.shuffle(tokenizedShuffled);
+
                     for(int i = 0; i<plus; i++){
                         toAdd.add("+");
+                        shuffled.add("+");
                     }
-                    toAdd.addAll(problemRepository.tokenizePythonCode(nextToken));
+                    toAdd.addAll(tokenized);
+                    shuffled.addAll(tokenizedShuffled);
+
+                    Collections.shuffle(shuffled);  // 🔹 섞기
+                    shuffledChunks.add(shuffled);
                     chunks.add(toAdd);
                 }
             }
@@ -95,16 +108,18 @@ public class AIService {
                     }
                     log.info(nextToken);
                     comments.add(nextToken);
+
                 }
             }
 
             InitResponse initResponse = new InitResponse();
             initResponse.setProblem(AIResponse.getTopic());
-            initResponse.setBlocks(chunks);
+            initResponse.setBlocks(shuffledChunks);
             initResponse.setComments(comments);
             problemRepository.setCurProblem(AIResponse.getTopic());
-            problemRepository.setBlocks(chunks);
             problemRepository.setComments(comments);
+            problemRepository.setBlocks(chunks);
+
 
             return initResponse;
 

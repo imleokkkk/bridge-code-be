@@ -1,6 +1,8 @@
 package org.example.responseDto;
 
-@lombok.Data
+import lombok.Data;
+
+@Data
 public class FinalResponse {
 
 }

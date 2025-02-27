@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="96d3981b-4b1b-4cf3-ad13-4dd4ed9d147f" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/FrontService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/FrontService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/controller/FrontController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/FrontController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/responseDto/FinalResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/responseDto/FinalResponse.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +27,12 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="bridge-code-be" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>

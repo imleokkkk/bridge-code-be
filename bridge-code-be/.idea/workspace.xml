@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96d3981b-4b1b-4cf3-ad13-4dd4ed9d147f" name="변경" comment="gg">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/config/RestClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/config/RestClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,8 +123,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="애플리케이션.Main (1)" />
         <item itemvalue="애플리케이션.Main" />
+        <item itemvalue="애플리케이션.Main (1)" />
         <item itemvalue="애플리케이션.ProblemRepository" />
       </list>
     </recent_temporary>
